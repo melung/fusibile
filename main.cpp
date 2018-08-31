@@ -682,9 +682,7 @@ static int runFusibile (int argc,
     for ( size_t i = 0; i < numImages; i++ ) {
         //printf ( "Opening image %ld: %s\n", i, ( inputFiles.images_folder + inputFiles.img_filenames[i] ).c_str () );
         img_grayscale.push_back ( imread ( ( inputFiles.images_folder + inputFiles.img_filenames[i] ), IMREAD_GRAYSCALE ) );
-        if ( algParameters.color_processing ) {
-            img_color.push_back ( imread ( ( inputFiles.images_folder + inputFiles.img_filenames[i] ), IMREAD_COLOR ) );
-        }
+        img_color.push_back ( imread ( ( inputFiles.images_folder + inputFiles.img_filenames[i] ), IMREAD_COLOR ) );
 
         if ( img_grayscale[i].rows == 0 ) {
             printf ( "Image seems to be invalid\n" );
@@ -808,15 +806,14 @@ static int runFusibile (int argc,
         //img_grayscale[i].convertTo(img_grayscale_float[i], CV_32FC1, 1.0/255.0); // or CV_32F works (too)
         img_grayscale[i].convertTo(img_grayscale_float[i], CV_32FC1); // or CV_32F works (too)
         img_grayscale[i].convertTo(img_grayscale_uint[i], CV_16UC1); // or CV_32F works (too)
-        if(algParameters.color_processing) {
-            vector<Mat_<float> > rgbChannels ( 3 );
-            img_color_float_alpha[i] = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC4 );
-            img_color[i].convertTo (img_color_float[i], CV_32FC3); // or CV_32F works (too)
-            Mat alpha( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC1 );
-            split (img_color_float[i], rgbChannels);
-            rgbChannels.push_back( alpha);
-            merge (rgbChannels, img_color_float_alpha[i]);
-        }
+        vector<Mat_<float> > rgbChannels ( 3 );
+        img_color_float_alpha[i] = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC4 );
+        img_color[i].convertTo (img_color_float[i], CV_32FC3); // or CV_32F works (too)
+        Mat alpha( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC1 );
+        split (img_color_float[i], rgbChannels);
+        rgbChannels.push_back( alpha);
+        merge (rgbChannels, img_color_float_alpha[i]);
+        imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
         /* Create vector of normals and disparities */
         vector<Mat_<float> > normal ( 3 );
         normals_and_depth[i] = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC4 );
@@ -829,10 +826,7 @@ static int runFusibile (int argc,
 
     // Copy images to texture memory
     if (algParameters.saveTexture) {
-        if (algParameters.color_processing)
-            addImageToTextureFloatColor (img_color_float_alpha, gs->imgs);
-        else
-            addImageToTextureFloatGray (img_grayscale_float, gs->imgs);
+        addImageToTextureFloatColor (img_color_float_alpha, gs->imgs);
     }
 
     addImageToTextureFloatColor (normals_and_depth, gs->normals_depths);
@@ -846,12 +840,7 @@ static int runFusibile (int argc,
     char plyFile[256];
     sprintf ( plyFile, "%s/final3d_model.ply", output_folder);
     printf("Writing ply file %s\n", plyFile);
-    //storePlyFileAsciiPointCloud ( plyFile, pc_list, inputData[0].cam, distImg);
-    storePlyFileBinaryPointCloud ( plyFile, pc_list, distImg);
-    //char xyzFile[256];
-    //sprintf ( xyzFile, "%s/final3d_model.xyz", output_folder);
-    //printf("Writing ply file %s\n", xyzFile);
-    //storeXYZPointCloud ( xyzFile, pc_list, inputData[0].cam, distImg);
+    storePlyFileBinaryPointCloud (plyFile, pc_list, distImg);
 
     return 0;
 }

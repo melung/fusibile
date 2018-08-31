@@ -10,7 +10,7 @@ class Point_li {
 public:
     float4 normal; // Normal
     float4 coord; // Point coordinate
-    float texture; // Average texture color
+    float texture4[4]; // Average texture color
 };
 
 

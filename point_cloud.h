@@ -10,6 +10,7 @@ public:
     float4 normal; // Normal
     float4 coord; // Point coordinate
     float texture; // Average texture color
+    float4 texture4; // Average texture color
 };
 
 

@@ -172,7 +172,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     //printf("3d Point is %f %f %f\n", X.x, X.y, X.z);
     float4 consistent_X = X;
     float4 consistent_normal  = normal;
-    float consistent_texture = tex2D<float> (gs.imgs[ref_camera], p.x+0.5f, p.y+0.5f);
+    float4 consistent_texture4 = tex2D<float4> (gs.imgs[ref_camera], p.x+0.5f, p.y+0.5f);
     int number_consistent = 0;
     //int2 used_list[camParams.viewSelectionSubsetNumber];
     int2 used_list[MAX_IMAGES];
@@ -224,7 +224,8 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
                     //consistent_X      = tmp_X;
                     consistent_normal = consistent_normal + tmp_normal_and_depth;
                     if (gs.params->saveTexture)
-                        consistent_texture = consistent_texture + tex2D<float> (gs.imgs[idxCurr], tmp_pt.x+0.5f, tmp_pt.y+0.5f);
+                        consistent_texture4 = consistent_texture4 + tex2D<float4> (gs.imgs[idxCurr], tmp_pt.x+0.5f, tmp_pt.y+0.5f);
+
 
 
                     // Save the point for later check
@@ -243,7 +244,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     // Average normals and points
     consistent_X       = consistent_X       / ((float) number_consistent + 1.0f);
     consistent_normal  = consistent_normal  / ((float) number_consistent + 1.0f);
-    consistent_texture = consistent_texture / ((float) number_consistent + 1.0f);
+    consistent_texture4 = consistent_texture4 / ((float) number_consistent + 1.0f);
 
     // If at least numConsistentThresh point agree:
     // Create point
@@ -251,24 +252,24 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     // (optional) save texture
     if (number_consistent >= gs.params->numConsistentThresh) {
         //printf("\tEnough consistent points!\nSaving point %f %f %f", consistent_X.x, consistent_X.y, consistent_X.z);
-        if (!gs.params->remove_black_background || consistent_texture>15) // hardcoded for middlebury TODO FIX
+        if (!gs.params->remove_black_background) // hardcoded for middlebury TODO FIX
         {
             gs.pc->points[center].coord  = consistent_X;
             gs.pc->points[center].normal = consistent_normal;
 
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
-                gs.pc->points[center].texture = consistent_texture;
+                gs.pc->points[center].texture4 = consistent_texture4;
 #endif
 
-            //// Mark corresponding point on other views as "used"
-            for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
-                int idxCurr = camParams.viewSelectionSubset[i];
-                if (used_list[idxCurr].x==-1)
-                    continue;
-                //printf("Used list point on camera %d is %d %d\n", idxCurr, used_list[idxCurr].x, used_list[idxCurr].y);
-                gs.lines[idxCurr].used_pixels [used_list[idxCurr].x + used_list[idxCurr].y*cols] = 1;
-            }
+//            //// Mark corresponding point on other views as "used"
+//            for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
+//                int idxCurr = camParams.viewSelectionSubset[i];
+//                if (used_list[idxCurr].x==-1)
+//                    continue;
+//                //printf("Used list point on camera %d is %d %d\n", idxCurr, used_list[idxCurr].x, used_list[idxCurr].y);
+//                gs.lines[idxCurr].used_pixels [used_list[idxCurr].x + used_list[idxCurr].y*cols] = 1;
+//            }
         }
     }
 
@@ -285,10 +286,15 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             Point_cu &p = gs.pc->points[x+y*gs.pc->cols];
             const float4 X      = p.coord;
             const float4 normal = p.normal;
-            float texture = 127.0f;
+            float texture4[4];
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
-                texture = p.texture;
+            {
+                texture4[0] = p.texture4.x;
+                texture4[1] = p.texture4.y;
+                texture4[2] = p.texture4.z;
+                texture4[3] = p.texture4.w;
+            }
 #endif
             if (count==pc_list.maximum) {
                 printf("Not enough space to save points :'(\n... allocating more! :)");
@@ -299,7 +305,10 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
                 pc_list.points[count].coord   = X;
                 pc_list.points[count].normal  = normal;
 #ifdef SAVE_TEXTURE
-                pc_list.points[count].texture = texture;
+                pc_list.points[count].texture4[0] = texture4[0];
+                pc_list.points[count].texture4[1] = texture4[1];
+                pc_list.points[count].texture4[2] = texture4[2];
+                pc_list.points[count].texture4[3] = texture4[3];
 #endif
                 count++;
             }
