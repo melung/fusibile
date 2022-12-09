@@ -23,14 +23,14 @@
 #define SAVE_TEXTURE
 //#define SMOOTHNESS
 
-#define FORCEINLINE_FUSIBILE __forceinline__
-//#define FORCEINLINE_FUSIBILE
+#define FORCEINLINE __forceinline__
+//#define FORCEINLINE
 
 
 __device__ float K[16];
 __device__ float K_inv[16];
 
-/*__device__ FORCEINLINE_FUSIBILE __constant__ float4 camerasK[32];*/
+/*__device__ FORCEINLINE __constant__ float4 camerasK[32];*/
 
 /* compute depth value from disparity or disparity value from depth
  * Input:  f         - focal length in pixel
@@ -38,7 +38,7 @@ __device__ float K_inv[16];
  *         d - either disparity or depth value
  * Output: either depth or disparity value
  */
-__device__ FORCEINLINE_FUSIBILE float disparityDepthConversion_cu ( const float &f, const float &baseline, const float &d ) {
+__device__ FORCEINLINE float disparityDepthConversion_cu ( const float &f, const float &baseline, const float &d ) {
     return f * baseline / d;
 }
 
@@ -48,12 +48,12 @@ __device__ FORCEINLINE_FUSIBILE float disparityDepthConversion_cu ( const float 
  *         d - either disparity or depth value
  * Output: either depth or disparity value
  */
-__device__ FORCEINLINE_FUSIBILE float disparityDepthConversion_cu2 ( const float &f, const Camera_cu &cam_ref, const Camera_cu &cam, const float &d ) {
+__device__ FORCEINLINE float disparityDepthConversion_cu2 ( const float &f, const Camera_cu &cam_ref, const Camera_cu &cam, const float &d ) {
     float baseline = l2_float4(cam_ref.C4 - cam.C4);
     return f * baseline / d;
 }
 
-__device__ FORCEINLINE_FUSIBILE void get3Dpoint_cu ( float4 * __restrict__ ptX, const Camera_cu &cam, const int2 &p, const float &depth ) {
+__device__ FORCEINLINE void get3Dpoint_cu ( float4 * __restrict__ ptX, const Camera_cu &cam, const int2 &p, const float &depth ) {
     // in case camera matrix is not normalized: see page 162, then depth might not be the real depth but w and depth needs to be computed from that first
     const float4 pt = make_float4 (
                                    depth * (float)p.x     - cam.P_col34.x,
@@ -63,7 +63,7 @@ __device__ FORCEINLINE_FUSIBILE void get3Dpoint_cu ( float4 * __restrict__ ptX, 
 
     matvecmul4 (cam.M_inv, pt, ptX);
 }
-__device__ FORCEINLINE_FUSIBILE void get3Dpoint_cu1 ( float4 * __restrict__ ptX, const Camera_cu &cam, const int2 &p) {
+__device__ FORCEINLINE void get3Dpoint_cu1 ( float4 * __restrict__ ptX, const Camera_cu &cam, const int2 &p) {
     // in case camera matrix is not normalized: see page 162, then depth might not be the real depth but w and depth needs to be computed from that first
     float4 pt;
     pt.x = (float)p.x     - cam.P_col34.x;
@@ -73,11 +73,11 @@ __device__ FORCEINLINE_FUSIBILE void get3Dpoint_cu1 ( float4 * __restrict__ ptX,
     matvecmul4 (cam.M_inv, pt, ptX);
 }
 //get d parameter of plane pi = [nT, d]T, which is the distance of the plane to the camera center
-__device__ FORCEINLINE_FUSIBILE float getPlaneDistance_cu ( const float4 &normal, const float4 &X ) {
+__device__ FORCEINLINE float getPlaneDistance_cu ( const float4 &normal, const float4 &X ) {
     return -(dot4(normal,X));
 }
 
-__device__ FORCEINLINE_FUSIBILE void normalize_cu (float4 * __restrict__ v)
+__device__ FORCEINLINE void normalize_cu (float4 * __restrict__ v)
 {
     const float normSquared = pow2(v->x) + pow2(v->y) + pow2(v->z);
     const float inverse_sqrt = rsqrtf (normSquared);
@@ -85,7 +85,7 @@ __device__ FORCEINLINE_FUSIBILE void normalize_cu (float4 * __restrict__ v)
     v->y *= inverse_sqrt;
     v->z *= inverse_sqrt;
 }
-__device__ FORCEINLINE_FUSIBILE void getViewVector_cu (float4 * __restrict__ v, const Camera_cu &camera, const int2 &p)
+__device__ FORCEINLINE void getViewVector_cu (float4 * __restrict__ v, const Camera_cu &camera, const int2 &p)
 {
     get3Dpoint_cu1 (v, camera, p);
     sub((*v), camera.C4);
@@ -95,16 +95,16 @@ __device__ FORCEINLINE_FUSIBILE void getViewVector_cu (float4 * __restrict__ v, 
     //v->z=1;
 }
 
-__device__ FORCEINLINE_FUSIBILE float l1_norm(float f) {
+__device__ FORCEINLINE float l1_norm(float f) {
     return fabsf(f);
 }
-__device__ FORCEINLINE_FUSIBILE float l1_norm(float4 f) {
+__device__ FORCEINLINE float l1_norm(float4 f) {
     return ( fabsf (f.x) +
              fabsf (f.y) +
              fabsf (f.z))*0.3333333f;
 
 }
-__device__ FORCEINLINE_FUSIBILE float l1_norm2(float4 f) {
+__device__ FORCEINLINE float l1_norm2(float4 f) {
     return ( fabsf (f.x) +
              fabsf (f.y) +
              fabsf (f.z));
@@ -115,7 +115,7 @@ __device__ FORCEINLINE_FUSIBILE float l1_norm2(float4 f) {
  * Input: v1,v2 - vectors
  * Output: angle in radian
  */
-__device__ FORCEINLINE_FUSIBILE float getAngle_cu ( const float4 &v1, const float4 &v2 ) {
+__device__ FORCEINLINE float getAngle_cu ( const float4 &v1, const float4 &v2 ) {
     float angle = acosf ( dot4(v1, v2));
     //if angle is not a number the dot product was 1 and thus the two vectors should be identical --> return 0
     if ( angle != angle )
@@ -124,7 +124,7 @@ __device__ FORCEINLINE_FUSIBILE float getAngle_cu ( const float4 &v1, const floa
     //cout << acosf ( v1.dot ( v2 ) ) << " / " << v1.dot ( v2 )<< " / " << v1<< " / " << v2 << endl;
     return angle;
 }
-__device__ FORCEINLINE_FUSIBILE void project_on_camera (const float4 &X, const Camera_cu &cam, float2 *pt, float *depth) {
+__device__ FORCEINLINE void project_on_camera (const float4 &X, const Camera_cu &cam, float2 *pt, float *depth) {
     float4 tmp = make_float4 (0, 0, 0, 0);
     matvecmul4P (cam.P, X, (&tmp));
     pt->x = tmp.x / tmp.z;
@@ -172,10 +172,11 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     //printf("3d Point is %f %f %f\n", X.x, X.y, X.z);
     float4 consistent_X = X;
     float4 consistent_normal  = normal;
-    float consistent_texture = tex2D<float> (gs.imgs[ref_camera], p.x+0.5f, p.y+0.5f);
+    float4 consistent_texture4 = tex2D<float4> (gs.imgs[ref_camera], p.x+0.5f, p.y+0.5f);
     int number_consistent = 0;
     //int2 used_list[camParams.viewSelectionSubsetNumber];
     int2 used_list[MAX_IMAGES];
+
     for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
 
         int idxCurr = camParams.viewSelectionSubset[i];
@@ -224,7 +225,8 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
                     //consistent_X      = tmp_X;
                     consistent_normal = consistent_normal + tmp_normal_and_depth;
                     if (gs.params->saveTexture)
-                        consistent_texture = consistent_texture + tex2D<float> (gs.imgs[idxCurr], tmp_pt.x+0.5f, tmp_pt.y+0.5f);
+                        consistent_texture4 = consistent_texture4 + tex2D<float4> (gs.imgs[idxCurr], tmp_pt.x+0.5f, tmp_pt.y+0.5f);
+
 
 
                     // Save the point for later check
@@ -243,7 +245,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     // Average normals and points
     consistent_X       = consistent_X       / ((float) number_consistent + 1.0f);
     consistent_normal  = consistent_normal  / ((float) number_consistent + 1.0f);
-    consistent_texture = consistent_texture / ((float) number_consistent + 1.0f);
+    consistent_texture4 = consistent_texture4 / ((float) number_consistent + 1.0f);
 
     // If at least numConsistentThresh point agree:
     // Create point
@@ -251,24 +253,24 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     // (optional) save texture
     if (number_consistent >= gs.params->numConsistentThresh) {
         //printf("\tEnough consistent points!\nSaving point %f %f %f", consistent_X.x, consistent_X.y, consistent_X.z);
-        if (!gs.params->remove_black_background || consistent_texture>15) // hardcoded for middlebury TODO FIX
+        if (!gs.params->remove_black_background) // hardcoded for middlebury TODO FIX
         {
             gs.pc->points[center].coord  = consistent_X;
             gs.pc->points[center].normal = consistent_normal;
 
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
-                gs.pc->points[center].texture = consistent_texture;
+                gs.pc->points[center].texture4 = consistent_texture4;
 #endif
 
-            //// Mark corresponding point on other views as "used"
-            for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
-                int idxCurr = camParams.viewSelectionSubset[i];
-                if (used_list[idxCurr].x==-1)
-                    continue;
-                //printf("Used list point on camera %d is %d %d\n", idxCurr, used_list[idxCurr].x, used_list[idxCurr].y);
-                gs.lines[idxCurr].used_pixels [used_list[idxCurr].x + used_list[idxCurr].y*cols] = 1;
-            }
+//            //// Mark corresponding point on other views as "used"
+//            for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
+//                int idxCurr = camParams.viewSelectionSubset[i];
+//                if (used_list[idxCurr].x==-1)
+//                    continue;
+//                //printf("Used list point on camera %d is %d %d\n", idxCurr, used_list[idxCurr].x, used_list[idxCurr].y);
+//                gs.lines[idxCurr].used_pixels [used_list[idxCurr].x + used_list[idxCurr].y*cols] = 1;
+//            }
         }
     }
 
@@ -285,21 +287,30 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             Point_cu &p = gs.pc->points[x+y*gs.pc->cols];
             const float4 X      = p.coord;
             const float4 normal = p.normal;
-            float texture = 127.0f;
+            float texture4[4];
+	           bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
-                texture = p.texture;
+            {
+                texture4[0] = p.texture4.x;
+                texture4[1] = p.texture4.y;
+                texture4[2] = p.texture4.z;
+                texture4[3] = p.texture4.w;
+            }
 #endif
             if (count==pc_list.maximum) {
                 printf("Not enough space to save points :'(\n... allocating more! :)");
                 pc_list.increase_size(pc_list.maximum*2);
 
             }
-            if (X.x != 0 && X.y != 0 && X.z != 0) {
+            if (X.x != 0 && X.y != 0 && X.z != 0 && check ==false) {
                 pc_list.points[count].coord   = X;
                 pc_list.points[count].normal  = normal;
 #ifdef SAVE_TEXTURE
-                pc_list.points[count].texture = texture;
+                pc_list.points[count].texture4[0] = texture4[0];
+                pc_list.points[count].texture4[1] = texture4[1];
+                pc_list.points[count].texture4[2] = texture4[2];
+                pc_list.points[count].texture4[3] = texture4[3];
 #endif
                 count++;
             }
@@ -347,17 +358,6 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
         fprintf(stderr, "There is no device supporting CUDA.\n");
         return ;
     }
-    //float mind = gs.params.min_disparity;
-    //float maxd = gs.params.max_disparity;
-    //srand(0);
-    //for(int x = 0; x < gs.cameras.cols; x++) {
-    //for(int y = 0; y < gs.cameras.rows; y++) {
-    //gs.lines.disp[y*gs.cameras.cols+x] = (float)rand()/(float)RAND_MAX * (maxd-mind) + mind;
-    //[>printf("%f\n", gs.lines.disp[y*256+x]);<]
-    //}
-    //}
-    /*printf("MAX DISP is %f\n", gs.params.max_disparity);*/
-    /*printf("MIN DISP is %f\n", gs.params.min_disparity);*/
     cudaSetDevice(i);
     cudaDeviceSetLimit(cudaLimitPrintfFifoSize, 1024*128);
     dim3 grid_size;
@@ -374,21 +374,7 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
     block_size_initrand.x=32;
     block_size_initrand.y=32;
 
-/*     printf("Launching kernel with grid of size %d %d and block of size %d %d and shared size %d %d\nBlock %d %d and radius %d %d and tile %d %d\n",
-           grid_size.x,
-           grid_size.y,
-           block_size.x,
-           block_size.y,
-           SHARED_SIZE_W,
-           SHARED_SIZE_H,
-           BLOCK_W,
-           BLOCK_H,
-           WIN_RADIUS_W,
-           WIN_RADIUS_H,
-           TILE_W,
-           TILE_H
-          );
- */    printf("Grid size initrand is grid: %d-%d block: %d-%d\n", grid_size_initrand.x, grid_size_initrand.y, block_size_initrand.x, block_size_initrand.y);
+    printf("Grid size initrand is grid: %d-%d block: %d-%d\n", grid_size_initrand.x, grid_size_initrand.y, block_size_initrand.x, block_size_initrand.y);
 
     size_t avail;
     size_t total;
@@ -402,13 +388,11 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
     printf("Number of consistent points is \t%d\n", gs.params->numConsistentThresh);
     printf("Cam scale is \t%f\n", gs.params->cam_scale);
 
-    //int shared_memory_size = sizeof(float)  * SHARED_SIZE ;
+
     printf("Fusing points\n");
     cudaEventRecord(start);
 
-    //printf("Computing final disparity\n");
-    //for (int cam=0; cam<10; cam++) {
-    for (int cam=0; cam<num_views; cam++) {
+    for (int cam=0; cam< num_views; cam++) {
         fusibile<<< grid_size_initrand, block_size_initrand, cam>>>(gs, cam);
         cudaDeviceSynchronize();
         copy_point_cloud_to_host(gs, cam, pc_list); // slower but saves memory

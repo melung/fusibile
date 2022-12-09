@@ -76,6 +76,7 @@ static string getColorString(Vec3i color){
 	ss << (int)((float)color(2)/256.f) << " " << (int)((float)color(1)/256.f) << " " << (int)((float)color(0)/256.f);
 	return ss.str();
 }
+
 static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc, Mat_<float> &distImg) {
     cout << "store 3D points to ply file" << endl;
 
@@ -91,7 +92,7 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
     fprintf(outputPly, "property float z\n");
     fprintf(outputPly, "property float nx\n");
     fprintf(outputPly, "property float ny\n");
-    fprintf(outputPly, "property float nz\n");
+      fprintf(outputPly, "property float nz\n");
     fprintf(outputPly, "property uchar red\n");
     fprintf(outputPly, "property uchar green\n");
     fprintf(outputPly, "property uchar blue\n");
@@ -101,11 +102,13 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
 
     //write data
 #pragma omp parallel for
-    for(long int i = 0; i < pc.size; i++) {
+    for(size_t i = 0; i < pc.size; i++) {
         const Point_li &p = pc.points[i];
         const float4 normal = p.normal;
         float4 X = p.coord;
-        const char color = (int)p.texture;
+        const char color_r = (int)p.texture4[2];
+        const char color_g = (int)p.texture4[1];
+        const char color_b = (int)p.texture4[0];
         /*const int color = 127.0f;*/
         /*printf("Writing point %f %f %f\n", X.x, X.y, X.z);*/
 
@@ -123,318 +126,14 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
             fwrite(&normal.x, sizeof(normal.x), 1, outputPly);
             fwrite(&normal.y, sizeof(normal.y), 1, outputPly);
             fwrite(&normal.z, sizeof(normal.z), 1, outputPly);
-            fwrite(&color,  sizeof(char), 1, outputPly);
-            fwrite(&color,  sizeof(char), 1, outputPly);
-            fwrite(&color,  sizeof(char), 1, outputPly);
+            fwrite(&color_r,  sizeof(char), 1, outputPly);
+            fwrite(&color_g,  sizeof(char), 1, outputPly);
+            fwrite(&color_b,  sizeof(char), 1, outputPly);
         }
 
     }
     fclose(outputPly);
 }
-static void storeXYZPointCloud (char* plyFilePath, PointCloudList &pc) {
-    cout << "store 3D points to ply file" << endl;
-
-	ofstream myfile;
-	myfile.open (plyFilePath, ios::out);
-
-    //write data
-#pragma omp parallel for
-    for(long i = 0; i < pc.size; i++) {
-        const Point_li &p = pc.points[i];
-        const float4 normal = p.normal;
-        float4 X = p.coord;
-
-        if(!(X.x < FLT_MAX && X.x > -FLT_MAX) || !(X.y < FLT_MAX && X.y > -FLT_MAX) || !(X.z < FLT_MAX && X.z >= -FLT_MAX)){
-            X.x = 0.0f;
-            X.y = 0.0f;
-            X.z = 0.0f;
-        }
-#pragma omp critical
-        {
-            myfile << X.x << " " << X.y << " " << X.z << " " << normal.x << " " << normal.y << " " << normal.z << endl;
-        }
-
-    }
-	myfile.close();
-}
-static void storePlyFileAsciiPointCloud (char* plyFilePath, PointCloudList &pc, Mat_<float> &distImg) {
-	cout << "store 3D points to ply file" << endl;
-
-    /*FILE *outputPly;*/
-    /*outputPly=fopen(plyFilePath,"wb");*/
-
-    /*write header*/
-    /*fprintf(outputPly, "ply\n");*/
-    /*fprintf(outputPly, "format binary_little_endian 1.0\n");*/
-    /*fprintf(outputPly, "element vertex %d\n",count);*/
-    /*fprintf(outputPly, "property float x\n");*/
-    /*fprintf(outputPly, "property float y\n");*/
-    /*fprintf(outputPly, "property float z\n");*/
-    /*fprintf(outputPly, "property float nx\n");*/
-    /*fprintf(outputPly, "property float ny\n");*/
-    /*fprintf(outputPly, "property float nz\n");*/
-    /*fprintf(outputPly, "property uchar red\n");*/
-    /*fprintf(outputPly, "property uchar green\n");*/
-    /*fprintf(outputPly, "property uchar blue\n");*/
-    /*fprintf(outputPly, "end_header\n");*/
-
-	ofstream myfile;
-	myfile.open (plyFilePath, ios::out);
-
-	//write header
-	myfile << "ply" << endl;
-	myfile << "format ascii 1.0" << endl;
-	myfile << "element vertex " << pc.size << endl;
-	myfile << "property float x" << endl;
-	myfile << "property float y" << endl;
-	myfile << "property float z" << endl;
-	myfile << "property float nx" << endl;
-	myfile << "property float ny" << endl;
-	myfile << "property float nz" << endl;
-	myfile << "property uchar red" << endl;
-	myfile << "property uchar green" << endl;
-	myfile << "property uchar blue" << endl;
-	myfile << "end_header" << endl;
-
-
-    distImg = Mat::zeros(pc.rows,pc.cols,CV_32F);
-
-	//write data
-    #pragma omp parallel for
-    for(long i = 0; i < pc.size; i++) {
-        const Point_li &p = pc.points[i];
-        const float4 normal = p.normal;
-        float4 X = p.coord;
-        const int color = (int)p.texture;
-        /*const int color = 127.0f;*/
-        /*printf("Writing point %f %f %f\n", X.x, X.y, X.z);*/
-
-        if(!(X.x < FLT_MAX && X.x > -FLT_MAX) || !(X.y < FLT_MAX && X.y > -FLT_MAX) || !(X.z < FLT_MAX && X.z >= -FLT_MAX)){
-            X.x = 0.0f;
-            X.y = 0.0f;
-            X.z = 0.0f;
-        }
-#pragma omp critical
-        {
-            myfile << X.x << " " << X.y << " " << X.z << " " << normal.x << " " << normal.y << " " << normal.z << " " << color << " " << color << " " << color << endl;
-            /*fwrite(&X.x,      sizeof(float), 1, outputPly);*/
-            /*fwrite(&X.y,      sizeof(float), 1, outputPly);*/
-            /*fwrite(&X.z,      sizeof(float), 1, outputPly);*/
-            /*fwrite(&normal.x, sizeof(float), 1, outputPly);*/
-            /*fwrite(&normal.y, sizeof(float), 1, outputPly);*/
-            /*fwrite(&normal.z, sizeof(float), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(float), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(float), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(float), 1, outputPly);*/
-        }
-
-    }
-	myfile.close();
-/*fclose(outputPly);*/
-}
-//template <typename ImgType>
-static void storePlyFileBinaryPointCloud(char* plyFilePath, PointCloud &pc, Mat_<float> &distImg) {
-    cout << "store 3D points to ply file" << endl;
-
-    FILE *outputPly;
-    outputPly=fopen(plyFilePath,"wb");
-
-    /*write header*/
-    fprintf(outputPly, "ply\n");
-    fprintf(outputPly, "format binary_little_endian 1.0\n");
-    fprintf(outputPly, "element vertex %d\n",pc.size);
-    fprintf(outputPly, "property float x\n");
-    fprintf(outputPly, "property float y\n");
-    fprintf(outputPly, "property float z\n");
-    /*fprintf(outputPly, "property float nx\n");*/
-    /*fprintf(outputPly, "property float ny\n");*/
-    /*fprintf(outputPly, "property float nz\n");*/
-    /*fprintf(outputPly, "property uchar red\n");*/
-    /*fprintf(outputPly, "property uchar green\n");*/
-    /*fprintf(outputPly, "property uchar blue\n");*/
-    fprintf(outputPly, "end_header\n");
-
-
-    distImg = Mat::zeros(pc.rows,pc.cols,CV_32F);
-
-    //write data
-/*#pragma omp parallel for*/
-    for(int i = 0; i < pc.size; i++){
-        const Point_cu &p = pc.points[i];
-        //const float4 normal = p.normal;
-        float4 X = p.coord;
-        /*printf("Writing point %f %f %f\n", X.x, X.y, X.z);*/
-        /*float color = p.texture;*/
-        //const char color = 127.0f;
-
-        if(!(X.x < FLT_MAX && X.x > -FLT_MAX) || !(X.y < FLT_MAX && X.y > -FLT_MAX) || !(X.z < FLT_MAX && X.z >= -FLT_MAX)){
-            X.x = 0.0f;
-            X.y = 0.0f;
-            X.z = 0.0f;
-        }
-/*#pragma omp critical*/
-        {
-            /*myfile << X.x << " " << X.y << " " << X.z << " " << normal.x << " " << normal.y << " " << normal.z << " " << color << " " << color << " " << color << endl;*/
-            fwrite(&(X.x),      sizeof(float), 1, outputPly);
-            fwrite(&(X.y),      sizeof(float), 1, outputPly);
-            fwrite(&(X.z),      sizeof(float), 1, outputPly);
-            /*fwrite(&(normal.x), sizeof(float), 1, outputPly);*/
-            /*fwrite(&(normal.y), sizeof(float), 1, outputPly);*/
-            /*fwrite(&(normal.z), sizeof(float), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(char), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(char), 1, outputPly);*/
-            /*fwrite(&color,  sizeof(char), 1, outputPly);*/
-        }
-
-        /*distImg(y,x) = sqrt(pow(X.x-cam.C(0),2)+pow(X.y-cam.C(1),2)+pow(X.z-cam.C(2),2));*/
-    }
-
-    /*myfile.close();*/
-    fclose(outputPly);
-}
-template <typename ImgType>
-static void storePlyFileBinary(char* plyFilePath, const Mat_<float> &depthImg, const Mat_<Vec3f> &normals, const Mat_<ImgType> img, Camera cam, Mat_<float> &distImg){
-	cout << "store 3D points to ply file" << endl;
-
-    FILE *outputPly;
-    outputPly=fopen(plyFilePath,"wb");
-
-	//write header
-    fprintf(outputPly, "ply\n");
-    fprintf(outputPly, "format binary_little_endian 1.0\n");
-    fprintf(outputPly, "element vertex %d\n",depthImg.rows * depthImg.cols);
-    fprintf(outputPly, "property float x\n");
-    fprintf(outputPly, "property float y\n");
-    fprintf(outputPly, "property float z\n");
-    fprintf(outputPly, "property float nx\n");
-    fprintf(outputPly, "property float ny\n");
-    fprintf(outputPly, "property float nz\n");
-    fprintf(outputPly, "property uchar red\n");
-    fprintf(outputPly, "property uchar green\n");
-    fprintf(outputPly, "property uchar blue\n");
-    fprintf(outputPly, "end_header\n");
-
-	distImg = Mat::zeros(depthImg.rows,depthImg.cols,CV_32F);
-
-	//write data
-    #pragma omp parallel for
-	for(int x = 0; x < depthImg.cols; x++){
-		for(int y = 0; y < depthImg.rows; y++){
-			Vec3f n = normals(y,x);
-			ImgType color = img(y,x);
-
-			Vec3f ptX = get3Dpoint(cam,x,y,depthImg(y,x));
-
-			if(!(ptX(0) < FLT_MAX && ptX(0) > -FLT_MAX) || !(ptX(1) < FLT_MAX && ptX(12) > -FLT_MAX) || !(ptX(2) < FLT_MAX && ptX(2) >= -FLT_MAX)){
-				ptX(0) = 0.0f;
-				ptX(1) = 0.0f;
-				ptX(2) = 0.0f;
-			}
-            #pragma omp critical
-            {
-                //myfile << ptX(0) << " " << ptX(1) << " " << ptX(2) << " " << n(0) << " " << n(1) << " " << n(2) << " " << getColorString(color) << endl;
-                fwrite(&(ptX(0)), sizeof(float), 3, outputPly);
-                fwrite(&(n(0))  , sizeof(float), 3, outputPly);
-                fwrite(&color, sizeof(color) , 1,  outputPly);
-                fwrite(&color, sizeof(color) , 1,  outputPly);
-                fwrite(&color, sizeof(color) , 1,  outputPly);
-            }
-
-			distImg(y,x) = sqrt(pow(ptX(0)-cam.C(0),2)+pow(ptX(1)-cam.C(1),2)+pow(ptX(2)-cam.C(2),2));
-
-			//}else{
-			//	cout << ptX(0) << " " << ptX(1) << " " << ptX(2) << endl;
-			//	cout << depthImg(y,x) << endl;
-			//}
-
-
-			//P *
-			//cout << xValue << " " << yValue << " " << zValue << " / " <<
-		}
-	}
-
-fclose(outputPly);
-}
-
-template <typename ImgType>
-static void storePlyFile(char* plyFilePath, const Mat_<float> &depthImg, const Mat_<Vec3f> &normals, const Mat_<ImgType> img, Camera cam, Mat_<float> &distImg){
-	cout << "store 3D points to ply file" << endl;
-	ofstream myfile;
-	myfile.open (plyFilePath, ios::out);
-
-	//write header
-	myfile << "ply" << endl;
-	myfile << "format ascii 1.0" << endl;
-	myfile << "element vertex " << depthImg.rows * depthImg.cols << endl;
-	myfile << "property float x" << endl;
-	myfile << "property float y" << endl;
-	myfile << "property float z" << endl;
-	myfile << "property float nx" << endl;
-	myfile << "property float ny" << endl;
-	myfile << "property float nz" << endl;
-	myfile << "property uchar red" << endl;
-	myfile << "property uchar green" << endl;
-	myfile << "property uchar blue" << endl;
-	myfile << "end_header" << endl;
-
-	distImg = Mat::zeros(depthImg.rows,depthImg.cols,CV_32F);
-
-	//write data
-    //#pragma omp parallel for
-	for(int x = 0; x < depthImg.cols; x++){
-		for(int y = 0; y < depthImg.rows; y++){
-			/*
-			float zValue = depthImg(x,y);
-			float xValue = ((float)x-cx)*zValue/camParams.f;
-			float yValue = ((float)y-cy)*zValue/camParams.f;
-			myfile << xValue << " " << yValue << " " << zValue << endl;
-			*/
-
-			//Mat_<float> pt = Mat::ones(3,1,CV_32F);
-			//pt(0,0) = (float)x;
-			//pt(1,0) = (float)y;
-
-			Vec3f n = normals(y,x);
-			ImgType color = img(y,x);
-
-			//Mat_<float> ptX = P1_inv * depthImg(y,x)*pt;
-
-			//if(depthImg(y,x) <= 0.0001f)
-			//	continue;
-
-
-			Vec3f ptX = get3Dpoint(cam,x,y,depthImg(y,x));
-
-			//Vec3f ptX_v1 = get3dPointFromPlane(cam.P_inv,cam.C,n,planes.d(y,x),x,y);
-			//cout << ptX_v1 << " / " << ptX << endl;
-
-			if(!(ptX(0) < FLT_MAX && ptX(0) > -FLT_MAX) || !(ptX(1) < FLT_MAX && ptX(12) > -FLT_MAX) || !(ptX(2) < FLT_MAX && ptX(2) >= -FLT_MAX)){
-				ptX(0) = 0.0f;
-				ptX(1) = 0.0f;
-				ptX(2) = 0.0f;
-			}
-            //#pragma omp critical
-            {
-			myfile << ptX(0) << " " << ptX(1) << " " << ptX(2) << " " << n(0) << " " << n(1) << " " << n(2) << " " << getColorString(color) << endl;
-            }
-
-			distImg(y,x) = sqrt(pow(ptX(0)-cam.C(0),2)+pow(ptX(1)-cam.C(1),2)+pow(ptX(2)-cam.C(2),2));
-
-			//}else{
-			//	cout << ptX(0) << " " << ptX(1) << " " << ptX(2) << endl;
-			//	cout << depthImg(y,x) << endl;
-			//}
-
-
-			//P *
-			//cout << xValue << " " << yValue << " " << zValue << " / " <<
-		}
-	}
-
-	myfile.close();
-}
-
-
 
 static void getNormalsForDisplay(const Mat &normals, Mat &normals_display, int rtype = CV_16U){
 	if(rtype == CV_8U)

@@ -64,7 +64,7 @@ public:
         gamma             = 10.0f; // parameter for weight function (used e.g. in PM_COST) CUDA
         border_value        = -1; // what value should pixel at extended border get (constant or replicate -1)
         iterations          = 8; // number of iterations
-        color_processing   = false; // use color processing or not (otherwise just grayscale processing)
+        color_processing   = true; // use color processing or not (otherwise just grayscale processing)
         dispTol           = 1.0; //PM Stereo: 1, PM Huber: 0.5
         normTol           = 0.1f; // 0.1 ... about 5.7 degrees
         census_epsilon    = 2.5f; //for census transform
@@ -76,7 +76,7 @@ public:
         n_best              = 2; // CUDA
         cost_comb           = 1; // CUDA
         viewSelection      = false;
-        depthMin          = 2.0f; // CUDA
+        depthMin          = 0.0f; // CUDA
         depthMax          = 20.0f; // CUDA
         remove_black_background = false; // CUDA
 
