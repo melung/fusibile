@@ -288,10 +288,8 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             const float4 X      = p.coord;
             const float4 normal = p.normal;
             float texture4[4];
-<<<<<<< HEAD
-=======
-	           bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
->>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
+	        bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
+
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
             {
