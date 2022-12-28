@@ -76,7 +76,7 @@ public:
         n_best              = 2; // CUDA
         cost_comb           = 1; // CUDA
         viewSelection      = false;
-        depthMin          = 2.0f; // CUDA
+        depthMin          = 0.0f; // CUDA
         depthMax          = 20.0f; // CUDA
         remove_black_background = false; // CUDA
 

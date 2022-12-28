@@ -90,9 +90,15 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
     fprintf(outputPly, "property float x\n");
     fprintf(outputPly, "property float y\n");
     fprintf(outputPly, "property float z\n");
+<<<<<<< HEAD
 //    fprintf(outputPly, "property float nx\n");
 //    fprintf(outputPly, "property float ny\n");
 //    fprintf(outputPly, "property float nz\n");
+=======
+    fprintf(outputPly, "property float nx\n");
+    fprintf(outputPly, "property float ny\n");
+      fprintf(outputPly, "property float nz\n");
+>>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
     fprintf(outputPly, "property uchar red\n");
     fprintf(outputPly, "property uchar green\n");
     fprintf(outputPly, "property uchar blue\n");
@@ -123,9 +129,15 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
             fwrite(&X.x,      sizeof(X.x), 1, outputPly);
             fwrite(&X.y,      sizeof(X.y), 1, outputPly);
             fwrite(&X.z,      sizeof(X.z), 1, outputPly);
+<<<<<<< HEAD
 //            fwrite(&normal.x, sizeof(normal.x), 1, outputPly);
 //            fwrite(&normal.y, sizeof(normal.y), 1, outputPly);
 //            fwrite(&normal.z, sizeof(normal.z), 1, outputPly);
+=======
+            fwrite(&normal.x, sizeof(normal.x), 1, outputPly);
+            fwrite(&normal.y, sizeof(normal.y), 1, outputPly);
+            fwrite(&normal.z, sizeof(normal.z), 1, outputPly);
+>>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
             fwrite(&color_r,  sizeof(char), 1, outputPly);
             fwrite(&color_g,  sizeof(char), 1, outputPly);
             fwrite(&color_b,  sizeof(char), 1, outputPly);

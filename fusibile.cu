@@ -176,6 +176,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     int number_consistent = 0;
     //int2 used_list[camParams.viewSelectionSubsetNumber];
     int2 used_list[MAX_IMAGES];
+
     for ( int i = 0; i < camParams.viewSelectionSubsetNumber; i++ ) {
 
         int idxCurr = camParams.viewSelectionSubset[i];
@@ -287,6 +288,10 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             const float4 X      = p.coord;
             const float4 normal = p.normal;
             float texture4[4];
+<<<<<<< HEAD
+=======
+	           bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
+>>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
             {
@@ -301,7 +306,7 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
                 pc_list.increase_size(pc_list.maximum*2);
 
             }
-            if (X.x != 0 && X.y != 0 && X.z != 0) {
+            if (X.x != 0 && X.y != 0 && X.z != 0 && check ==false) {
                 pc_list.points[count].coord   = X;
                 pc_list.points[count].normal  = normal;
 #ifdef SAVE_TEXTURE
@@ -356,17 +361,6 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
         fprintf(stderr, "There is no device supporting CUDA.\n");
         return ;
     }
-    //float mind = gs.params.min_disparity;
-    //float maxd = gs.params.max_disparity;
-    //srand(0);
-    //for(int x = 0; x < gs.cameras.cols; x++) {
-    //for(int y = 0; y < gs.cameras.rows; y++) {
-    //gs.lines.disp[y*gs.cameras.cols+x] = (float)rand()/(float)RAND_MAX * (maxd-mind) + mind;
-    //[>printf("%f\n", gs.lines.disp[y*256+x]);<]
-    //}
-    //}
-    /*printf("MAX DISP is %f\n", gs.params.max_disparity);*/
-    /*printf("MIN DISP is %f\n", gs.params.min_disparity);*/
     cudaSetDevice(i);
     cudaDeviceSetLimit(cudaLimitPrintfFifoSize, 1024*128);
     dim3 grid_size;
@@ -383,21 +377,7 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
     block_size_initrand.x=32;
     block_size_initrand.y=32;
 
-/*     printf("Launching kernel with grid of size %d %d and block of size %d %d and shared size %d %d\nBlock %d %d and radius %d %d and tile %d %d\n",
-           grid_size.x,
-           grid_size.y,
-           block_size.x,
-           block_size.y,
-           SHARED_SIZE_W,
-           SHARED_SIZE_H,
-           BLOCK_W,
-           BLOCK_H,
-           WIN_RADIUS_W,
-           WIN_RADIUS_H,
-           TILE_W,
-           TILE_H
-          );
- */    printf("Grid size initrand is grid: %d-%d block: %d-%d\n", grid_size_initrand.x, grid_size_initrand.y, block_size_initrand.x, block_size_initrand.y);
+    printf("Grid size initrand is grid: %d-%d block: %d-%d\n", grid_size_initrand.x, grid_size_initrand.y, block_size_initrand.x, block_size_initrand.y);
 
     size_t avail;
     size_t total;
@@ -411,13 +391,11 @@ void fusibile_cu(GlobalState &gs, PointCloudList &pc_list, int num_views)
     printf("Number of consistent points is \t%d\n", gs.params->numConsistentThresh);
     printf("Cam scale is \t%f\n", gs.params->cam_scale);
 
-    //int shared_memory_size = sizeof(float)  * SHARED_SIZE ;
+
     printf("Fusing points\n");
     cudaEventRecord(start);
 
-    //printf("Computing final disparity\n");
-    //for (int cam=0; cam<10; cam++) {
-    for (int cam=0; cam<num_views; cam++) {
+    for (int cam=0; cam< num_views; cam++) {
         fusibile<<< grid_size_initrand, block_size_initrand, cam>>>(gs, cam);
         cudaDeviceSynchronize();
         copy_point_cloud_to_host(gs, cam, pc_list); // slower but saves memory
