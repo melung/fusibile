@@ -376,7 +376,7 @@ static void selectViews ( CameraParameters &cameraParams, int imgWidth, int imgH
     float maximum_angle_degree = 30;
     float minimum_angle_radians = minimum_angle_degree * M_PI / 180.0f;
     float maximum_angle_radians = maximum_angle_degree * M_PI / 180.0f;
-    printf("Accepted intersection angle of central rays is %f to %f degrees\n", minimum_angle_degree, maximum_angle_degree);
+    //printf("Accepted intersection angle of central rays is %f to %f degrees\n", minimum_angle_degree, maximum_angle_degree);
     for ( size_t i = 0; i < cameras.size (); i++ ) {
         //if ( i == cameraParams.idRef && !cameraParams.rectified )
         //  continue;
@@ -699,9 +699,10 @@ static int runFusibile (int argc,
     GlobalState *gs = new GlobalState;
 	gs->cameras = new CameraParameters_cu;
 	gs->pc = new PointCloud;
-    cudaMemGetInfo( &avail, &total );
-    used = total - avail;
-    printf("Device memory used: %fMB\n", used/1000000.0f);
+
+    //cudaMemGetInfo( &avail, &total );
+    //used = total - avail;
+    //printf("Device memory used: %fMB\n", used/1000000.0f);
 
     uint32_t rows = img_grayscale[0].rows;
     uint32_t cols = img_grayscale[0].cols;
@@ -714,9 +715,15 @@ static int runFusibile (int argc,
     printf("Camera size is %lu\n", camParams.cameras.size());
 
     for ( int i = 0; i < algParameters.num_img_processed; i++ ) {
+	printf("%f\n", camParams.cameras[i].baseline);
+	printf("%f\n", camParams.cameras[i].depthMax);
+	printf("%f\n", camParams.cameras[i].depthMin);	
+
         algParameters.min_disparity = disparityDepthConversion ( camParams.f, camParams.cameras[i].baseline, camParams.cameras[i].depthMax );
+        printf("Min disparity: %f\n", algParameters.min_disparity);
         algParameters.max_disparity = disparityDepthConversion ( camParams.f, camParams.cameras[i].baseline, camParams.cameras[i].depthMin );
-    }
+        printf("Max disparity: %f\n", algParameters.max_disparity);
+     }
 
     selectViews ( camParams, cols, rows, false);
     int numSelViews = camParams.viewSelectionSubset.size ();
@@ -814,7 +821,12 @@ static int runFusibile (int argc,
         split (img_color_float[i], rgbChannels);
         rgbChannels.push_back( alpha);
         merge (rgbChannels, img_color_float_alpha[i]);
+<<<<<<< HEAD
         imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
+=======
+	printf("oh");
+        //imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
+>>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
         /* Create vector of normals and disparities */
         vector<Mat_<float> > normal ( 3 );
         normals_and_depth[i] = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC4 );
