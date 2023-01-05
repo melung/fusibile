@@ -381,7 +381,7 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
             */
         }
 
-        transformCamera ( R[i],t[i], transform,    params.cameras[i],params.K );
+        transformCamera ( R[i],t[i], transform,    params.cameras[i],params.cameras[i].K);
 
         params.cameras[i].P_inv = params.cameras[i].P.inv ( DECOMP_SVD );
         params.cameras[i].M_inv = params.cameras[i].P.colRange ( 0,3 ).inv ();

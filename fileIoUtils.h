@@ -241,7 +241,7 @@ static int readDmbNormal (const char *filename, Mat_<Vec3f> &img)
     fread(data,sizeof(float),dataSize,inimage);
 
     img = Mat(h,w,CV_32FC3,data);
-
+    cout << img.at<cv::Vec3f>(0,0)[0] << img.at<cv::Vec3f>(0,0)[1] << img.at<cv::Vec3f>(0,0)[2]  << endl;
     fclose(inimage);
     return 0;
 

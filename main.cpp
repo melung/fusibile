@@ -619,7 +619,7 @@ static int runFusibile (int argc,
     pTime = localtime(&timeObj);
 
     char output_folder[256];
-    sprintf(output_folder, "%s/consistencyCheck-%04d%02d%02d-%02d%02d%02d/",results_folder.c_str(), pTime->tm_year+1900, pTime->tm_mon+1,pTime->tm_mday,pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
+    sprintf(output_folder, "%s/3D_Scan/",results_folder.c_str());
 #if defined(_WIN32)
     _mkdir(output_folder);
 #else
@@ -756,6 +756,7 @@ static int runFusibile (int argc,
         cout << "Reading normal " << i << endl;
         readDmbNormal((dat.path + "/normals.dmb").c_str(),dat.normals);
 
+        
         //read depth
         cout << "Reading disp " << i << endl;
         readDmb((dat.path + "/disp.dmb").c_str(),dat.depthMap);
@@ -838,7 +839,7 @@ static int runFusibile (int argc,
     //Mat_<Vec3f> norm0 = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC3 );
     Mat_<float> distImg;
     char plyFile[256];
-    sprintf ( plyFile, "%s/final3d_model.ply", output_folder);
+    sprintf ( plyFile, "%s/point_clouds.ply", output_folder);
     printf("Writing ply file %s\n", plyFile);
     storePlyFileBinaryPointCloud (plyFile, pc_list, distImg);
 

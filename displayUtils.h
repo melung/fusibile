@@ -90,9 +90,9 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
     fprintf(outputPly, "property float x\n");
     fprintf(outputPly, "property float y\n");
     fprintf(outputPly, "property float z\n");
-//    fprintf(outputPly, "property float nx\n");
-//    fprintf(outputPly, "property float ny\n");
-//    fprintf(outputPly, "property float nz\n");
+    fprintf(outputPly, "property float nx\n");
+    fprintf(outputPly, "property float ny\n");
+    fprintf(outputPly, "property float nz\n");
     fprintf(outputPly, "property uchar red\n");
     fprintf(outputPly, "property uchar green\n");
     fprintf(outputPly, "property uchar blue\n");
@@ -104,7 +104,7 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
 #pragma omp parallel for
     for(size_t i = 0; i < pc.size; i++) {
         const Point_li &p = pc.points[i];
-//        const float4 normal = p.normal;
+        const float4 normal = p.normal;
         float4 X = p.coord;
         const char color_r = (int)p.texture4[2];
         const char color_g = (int)p.texture4[1];
@@ -123,9 +123,9 @@ static void storePlyFileBinaryPointCloud (char* plyFilePath, PointCloudList &pc,
             fwrite(&X.x,      sizeof(X.x), 1, outputPly);
             fwrite(&X.y,      sizeof(X.y), 1, outputPly);
             fwrite(&X.z,      sizeof(X.z), 1, outputPly);
-//            fwrite(&normal.x, sizeof(normal.x), 1, outputPly);
-//            fwrite(&normal.y, sizeof(normal.y), 1, outputPly);
-//            fwrite(&normal.z, sizeof(normal.z), 1, outputPly);
+            fwrite(&normal.x, sizeof(normal.x), 1, outputPly);
+            fwrite(&normal.y, sizeof(normal.y), 1, outputPly);
+            fwrite(&normal.z, sizeof(normal.z), 1, outputPly);
             fwrite(&color_r,  sizeof(char), 1, outputPly);
             fwrite(&color_g,  sizeof(char), 1, outputPly);
             fwrite(&color_b,  sizeof(char), 1, outputPly);

@@ -72,7 +72,7 @@ public:
         cam_scale         = 1.0f; //used to rescale K in case of rescaled image size
         num_img_processed   = 1; //number of images that are processed as reference images
         costThresh        = 40.0f; // threshold to decide whether disparity/depth is valid or not
-         good_factor       = 1.5f; // for cost aggregation/combination good: factor for truncation CUDA
+        good_factor       = 1.5f; // for cost aggregation/combination good: factor for truncation CUDA
         n_best              = 2; // CUDA
         cost_comb           = 1; // CUDA
         viewSelection      = false;

@@ -243,7 +243,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
 
     // Average normals and points
     consistent_X       = consistent_X       / ((float) number_consistent + 1.0f);
-    consistent_normal  = consistent_normal  / ((float) number_consistent + 1.0f);
+    consistent_normal  = normal;
     consistent_texture4 = consistent_texture4 / ((float) number_consistent + 1.0f);
 
     // If at least numConsistentThresh point agree:
@@ -287,6 +287,7 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             const float4 X      = p.coord;
             const float4 normal = p.normal;
             float texture4[4];
+            bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
             {
@@ -301,9 +302,12 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
                 pc_list.increase_size(pc_list.maximum*2);
 
             }
-            if (X.x != 0 && X.y != 0 && X.z != 0) {
+            if (X.x != 0 && X.y != 0 && X.z != 0 && check == false) {
                 pc_list.points[count].coord   = X;
                 pc_list.points[count].normal  = normal;
+                //printf("%f,%f,%f", normal.x,normal.y,normal.z);
+
+
 #ifdef SAVE_TEXTURE
                 pc_list.points[count].texture4[0] = texture4[0];
                 pc_list.points[count].texture4[1] = texture4[1];
