@@ -822,10 +822,6 @@ static int runFusibile (int argc,
         rgbChannels.push_back( alpha);
         merge (rgbChannels, img_color_float_alpha[i]);
 <<<<<<< HEAD
-        imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
-=======
-	printf("oh");
-        //imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
 >>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
         /* Create vector of normals and disparities */
         vector<Mat_<float> > normal ( 3 );
