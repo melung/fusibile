@@ -10,6 +10,7 @@ public:
     float* P_inv;
     float* M_inv;
     float* R;
+    float* R_inv;
     /*float* t;*/
     float4 t4;
     /*float* C;*/
@@ -38,6 +39,7 @@ public:
         cudaMallocManaged (&K,       sizeof(float) * 4 * 4);
         cudaMallocManaged (&K_inv,   sizeof(float) * 4 * 4);
         cudaMallocManaged (&R,       sizeof(float) * 4 * 4);
+        cudaMallocManaged (&R_inv,   sizeof(float) * 4 * 4);
     }
     ~Camera_cu()
     {
@@ -47,6 +49,7 @@ public:
         cudaFree (K);
         cudaFree (K_inv);
         cudaFree (R);
+        cudaFree (R_inv);
     }
 
 };

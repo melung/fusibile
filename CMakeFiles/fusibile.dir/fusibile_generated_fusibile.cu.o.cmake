@@ -57,12 +57,12 @@ if(NOT generated_file)
 endif()
 
 # Set these up as variables to make reading the generated file easier
-set(CMAKE_COMMAND "/root/.local/bin/cmake") # path
+set(CMAKE_COMMAND "/usr/local/bin/cmake") # path
 set(source_file "/root/lhs/fusibile/fusibile.cu") # path
 set(NVCC_generated_dependency_file "/root/lhs/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.NVCC-depend") # path
 set(cmake_dependency_file "/root/lhs/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.depend") # path
-set(CUDA_make2cmake "/root/.local/share/cmake-3.19/Modules/FindCUDA/make2cmake.cmake") # path
-set(CUDA_parse_cubin "/root/.local/share/cmake-3.19/Modules/FindCUDA/parse_cubin.cmake") # path
+set(CUDA_make2cmake "/usr/local/share/cmake-3.15/Modules/FindCUDA/make2cmake.cmake") # path
+set(CUDA_parse_cubin "/usr/local/share/cmake-3.15/Modules/FindCUDA/parse_cubin.cmake") # path
 set(build_cubin OFF) # bool
 set(CUDA_HOST_COMPILER "/usr/bin/cc") # path
 # We won't actually use these variables for now, but we need to set this, in
@@ -79,8 +79,7 @@ set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
 set(CUDA_NVCC_FLAGS_RELEASE  ; )
 set(CUDA_NVCC_FLAGS_RELWITHDEBINFO  ; )
 set(nvcc_flags -m64) # list
-set(CUDA_NVCC_INCLUDE_DIRS [==[/usr/local/cuda-11.4/include;/usr/include;/usr/include/opencv;/root/lhs/fusibile/.;/usr/local/cuda-11.4/include;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv]==]) # list (needs to be in lua quotes to address backslashes)
-string(REPLACE "\\" "/" CUDA_NVCC_INCLUDE_DIRS "${CUDA_NVCC_INCLUDE_DIRS}")
+set(CUDA_NVCC_INCLUDE_DIRS "/usr/local/cuda-11.4/include;/usr/include;/usr/include/opencv;/root/lhs/fusibile/.;/usr/local/cuda-11.4/include;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv") # list (needs to be in quotes to handle spaces properly).
 set(CUDA_NVCC_COMPILE_DEFINITIONS [==[]==]) # list (needs to be in lua quotes see #16510 ).
 set(format_flag "-c") # string
 set(cuda_language_flag ) # list
@@ -105,7 +104,7 @@ endif()
 
 # This is the list of host compilation flags.  It C or CXX should already have
 # been chosen by FindCUDA.cmake.
-set(CMAKE_HOST_FLAGS  -fopenmp )
+set(CMAKE_HOST_FLAGS  )
 set(CMAKE_HOST_FLAGS_DEBUG -g)
 set(CMAKE_HOST_FLAGS_MINSIZEREL -Os -DNDEBUG)
 set(CMAKE_HOST_FLAGS_RELEASE -O3 -DNDEBUG)
@@ -163,7 +162,7 @@ macro(cuda_execute_process status command)
     # copy and paste a runnable command line.
     set(cuda_execute_process_string)
     foreach(arg ${ARGN})
-      # If there are quotes, escape them, so they come through.
+      # If there are quotes, excape them, so they come through.
       string(REPLACE "\"" "\\\"" arg ${arg})
       # Args with spaces need quotes around them to get them to be parsed as a single argument.
       if(arg MATCHES " ")
@@ -182,7 +181,7 @@ endmacro()
 # Delete the target file
 cuda_execute_process(
   "Removing ${generated_file}"
-  COMMAND "${CMAKE_COMMAND}" -E rm -f "${generated_file}"
+  COMMAND "${CMAKE_COMMAND}" -E remove "${generated_file}"
   )
 
 # For CUDA 2.3 and below, -G -M doesn't work, so remove the -G flag
@@ -249,7 +248,7 @@ endif()
 # Delete the temporary file
 cuda_execute_process(
   "Removing ${cmake_dependency_file}.tmp and ${NVCC_generated_dependency_file}"
-  COMMAND "${CMAKE_COMMAND}" -E rm -f "${cmake_dependency_file}.tmp" "${NVCC_generated_dependency_file}"
+  COMMAND "${CMAKE_COMMAND}" -E remove "${cmake_dependency_file}.tmp" "${NVCC_generated_dependency_file}"
   )
 
 if(CUDA_result)
@@ -275,7 +274,7 @@ if(CUDA_result)
   # Since nvcc can sometimes leave half done files make sure that we delete the output file.
   cuda_execute_process(
     "Removing ${generated_file}"
-    COMMAND "${CMAKE_COMMAND}" -E rm -f "${generated_file}"
+    COMMAND "${CMAKE_COMMAND}" -E remove "${generated_file}"
     )
   message(FATAL_ERROR "Error generating file ${generated_file}")
 else()

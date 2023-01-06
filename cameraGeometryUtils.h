@@ -325,10 +325,7 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
         // get 3-dimensional translation vectors and camera center (divide by augmented component)
         C[i] = T[i] ( Range ( 0,3 ),Range ( 0,1 ) ) / T[i] ( 3,0 );
         t[i] = -R[i] * C[i];
-	//t[i] = -C[i];
 
-        cout << "C: " << C[i] << endl;
-        cout << "t: " << t[i] << endl;
     }
 
     // transform projection matrices (R and t part) so that P1 = K [I | 0]
@@ -382,16 +379,12 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
             */
         }
 
-<<<<<<< HEAD
         transformCamera ( R[i],t[i], transform,    params.cameras[i],params.cameras[i].K);
 
-=======
-        transformCamera ( R[i],t[i], transform,    params.cameras[i],params.cameras[i].K );
-	//WTF2
->>>>>>> c28fcc72fa19c21da49354789071a3697abde931
         params.cameras[i].P_inv = params.cameras[i].P.inv ( DECOMP_SVD );
         params.cameras[i].M_inv = params.cameras[i].P.colRange ( 0,3 ).inv ();
 
+        params.cameras[i].R_inv = params.cameras[i].R.inv();
         // set camera baseline (if unknown we need to guess something)
         //float b = (float)norm(t1,t2,NORM_L2);
         params.cameras[i].baseline = 0.54f; //0.54 = Kitti baseline
@@ -417,6 +410,7 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
         copyOpencvMatToFloatArray ( params.cameras[i].P,     &cpc.cameras[i].P);
         copyOpencvMatToFloatArray ( params.cameras[i].P_inv, &cpc.cameras[i].P_inv);
         copyOpencvMatToFloatArray ( params.cameras[i].M_inv, &cpc.cameras[i].M_inv);
+        copyOpencvMatToFloatArray ( params.cameras[i].R_inv, &cpc.cameras[i].R_inv);
         //copyOpencvMatToFloatArray ( params.K,                &cpc.cameras[i].K);
         //copyOpencvMatToFloatArray ( params.K_inv,            &cpc.cameras[i].K_inv);
         copyOpencvMatToFloatArray ( params.cameras[i].K,                &cpc.cameras[i].K);

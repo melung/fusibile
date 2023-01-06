@@ -821,8 +821,7 @@ static int runFusibile (int argc,
         split (img_color_float[i], rgbChannels);
         rgbChannels.push_back( alpha);
         merge (rgbChannels, img_color_float_alpha[i]);
-<<<<<<< HEAD
->>>>>>> 410a0726aff8b35cae520d5b3c6bd00f2e3b1d27
+        imwrite("/data/dtu/github_data/scan9/points_mvsnet/test.jpg", img_color_float_alpha[i]);
         /* Create vector of normals and disparities */
         vector<Mat_<float> > normal ( 3 );
         normals_and_depth[i] = Mat::zeros ( img_grayscale[0].rows, img_grayscale[0].cols, CV_32FC4 );

@@ -63,6 +63,18 @@ __device__ FORCEINLINE void get3Dpoint_cu ( float4 * __restrict__ ptX, const Cam
 
     matvecmul4 (cam.M_inv, pt, ptX);
 }
+
+__device__ FORCEINLINE void getnormal_cu ( float4 * __restrict__ normal, const Camera_cu &cam, const float4 &normal_tmp ) {
+    // in case camera matrix is not normalized: see page 162, then depth might not be the real depth but w and depth needs to be computed from that first
+    const float4 pt = make_float4 (normal_tmp.x,
+                                   normal_tmp.y,
+                                   normal_tmp.z,
+                                   0);
+
+    matvecmul4 (-cam.R_inv, pt, normal);
+}
+
+
 __device__ FORCEINLINE void get3Dpoint_cu1 ( float4 * __restrict__ ptX, const Camera_cu &cam, const int2 &p) {
     // in case camera matrix is not normalized: see page 162, then depth might not be the real depth but w and depth needs to be computed from that first
     float4 pt;
@@ -156,7 +168,7 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
         return;
 
     //printf("ref_camera is %d\n", ref_camera);
-    const float4 normal = tex2D<float4> (gs.normals_depths[ref_camera], p.x+0.5f, p.y+0.5f);
+    float4 normal = tex2D<float4> (gs.normals_depths[ref_camera], p.x+0.5f, p.y+0.5f);
     //printf("Normal is %f %f %f\nDepth is %f\n", normal.x, normal.y, normal.z, normal.w);
     /*
      * For each point of the reference camera compute the 3d position corresponding to the corresponding depth.
@@ -167,7 +179,15 @@ __global__ void fusibile (GlobalState &gs, int ref_camera)
     float depth = normal.w;
 
     float4 X;
+    float4 normal_new;
     get3Dpoint_cu (&X, camParams.cameras[ref_camera], p, depth);
+
+    getnormal_cu (&normal_new, camParams.cameras[ref_camera], normal);
+    normal.x = normal_new.x;
+    normal.y = normal_new.y;
+    normal.z = normal_new.z;
+    
+    
     //if (p.x<100 && p.y ==100)
     //printf("3d Point is %f %f %f\n", X.x, X.y, X.z);
     float4 consistent_X = X;
@@ -288,12 +308,9 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
             const float4 X      = p.coord;
             const float4 normal = p.normal;
             float texture4[4];
-<<<<<<< HEAD
-            bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
-=======
-	        bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
 
->>>>>>> c28fcc72fa19c21da49354789071a3697abde931
+            bool check = (normal.x == 0 && normal.y == 0 && normal.z == 0);
+
 #ifdef SAVE_TEXTURE
             if (gs.params->saveTexture)
             {
@@ -308,11 +325,8 @@ void copy_point_cloud_to_host(GlobalState &gs, int cam, PointCloudList &pc_list)
                 pc_list.increase_size(pc_list.maximum*2);
 
             }
-<<<<<<< HEAD
-            if (X.x != 0 && X.y != 0 && X.z != 0 && check == false) {
-=======
+
             if (X.x != 0 && X.y != 0 && X.z != 0 && check ==false) {
->>>>>>> c28fcc72fa19c21da49354789071a3697abde931
                 pc_list.points[count].coord   = X;
                 pc_list.points[count].normal  = normal;
                 //printf("%f,%f,%f", normal.x,normal.y,normal.z);

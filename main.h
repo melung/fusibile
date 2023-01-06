@@ -60,6 +60,7 @@ struct Camera {
     Mat_<float> P;
     Mat_<float> P_inv;
     Mat_<float> M_inv;
+    Mat_<float> R_inv;
     //Mat_<float> K;
     Mat_<float> R;
     Mat_<float> t;
