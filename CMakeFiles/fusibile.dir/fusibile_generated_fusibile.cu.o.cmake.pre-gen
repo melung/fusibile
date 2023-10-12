@@ -57,22 +57,22 @@ if(NOT generated_file)
 endif()
 
 # Set these up as variables to make reading the generated file easier
-set(CMAKE_COMMAND "/usr/local/bin/cmake") # path
-set(source_file "/root/lhs/fusibile/fusibile.cu") # path
-set(NVCC_generated_dependency_file "/root/lhs/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.NVCC-depend") # path
-set(cmake_dependency_file "/root/lhs/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.depend") # path
-set(CUDA_make2cmake "/usr/local/share/cmake-3.15/Modules/FindCUDA/make2cmake.cmake") # path
-set(CUDA_parse_cubin "/usr/local/share/cmake-3.15/Modules/FindCUDA/parse_cubin.cmake") # path
+set(CMAKE_COMMAND "/usr/bin/cmake") # path
+set(source_file "/hdd1/lhs/dev/code/Github_melungl/fusibile/fusibile.cu") # path
+set(NVCC_generated_dependency_file "/hdd1/lhs/dev/code/Github_melungl/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.NVCC-depend") # path
+set(cmake_dependency_file "/hdd1/lhs/dev/code/Github_melungl/fusibile/CMakeFiles/fusibile.dir//fusibile_generated_fusibile.cu.o.depend") # path
+set(CUDA_make2cmake "/usr/share/cmake-3.10/Modules/FindCUDA/make2cmake.cmake") # path
+set(CUDA_parse_cubin "/usr/share/cmake-3.10/Modules/FindCUDA/parse_cubin.cmake") # path
 set(build_cubin OFF) # bool
 set(CUDA_HOST_COMPILER "/usr/bin/cc") # path
 # We won't actually use these variables for now, but we need to set this, in
 # order to force this file to be run again if it changes.
-set(generated_file_path "/root/lhs/fusibile/CMakeFiles/fusibile.dir//.") # path
-set(generated_file_internal "/root/lhs/fusibile/CMakeFiles/fusibile.dir//./fusibile_generated_fusibile.cu.o") # path
-set(generated_cubin_file_internal "/root/lhs/fusibile/CMakeFiles/fusibile.dir//./fusibile_generated_fusibile.cu.o.cubin.txt") # path
+set(generated_file_path "/hdd1/lhs/dev/code/Github_melungl/fusibile/CMakeFiles/fusibile.dir//.") # path
+set(generated_file_internal "/hdd1/lhs/dev/code/Github_melungl/fusibile/CMakeFiles/fusibile.dir//./fusibile_generated_fusibile.cu.o") # path
+set(generated_cubin_file_internal "/hdd1/lhs/dev/code/Github_melungl/fusibile/CMakeFiles/fusibile.dir//./fusibile_generated_fusibile.cu.o.cubin.txt") # path
 
 set(CUDA_NVCC_EXECUTABLE "/usr/local/cuda-11.4/bin/nvcc") # path
-set(CUDA_NVCC_FLAGS -O3;--use_fast_math;--ptxas-options=-v;-std=c++11;--compiler-options;-Wall;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_86,code=sm_86 ;; ) # list
+set(CUDA_NVCC_FLAGS -O3;--use_fast_math;--ptxas-options=-v;-std=c++11;--compiler-options;-Wall;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_75,code=sm_75 ;; ) # list
 # Build specific configuration flags
 set(CUDA_NVCC_FLAGS_DEBUG  ; )
 set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
@@ -133,7 +133,7 @@ list(APPEND CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS_${build_configuration}})
 list( FIND CUDA_NVCC_FLAGS "-ccbin" ccbin_found0 )
 list( FIND CUDA_NVCC_FLAGS "--compiler-bindir" ccbin_found1 )
 if( ccbin_found0 LESS 0 AND ccbin_found1 LESS 0 AND CUDA_HOST_COMPILER )
-  if (CUDA_HOST_COMPILER STREQUAL "" AND DEFINED CCBIN)
+  if (CUDA_HOST_COMPILER STREQUAL "$(VCInstallDir)bin" AND DEFINED CCBIN)
     set(CCBIN -ccbin "${CCBIN}")
   else()
     set(CCBIN -ccbin "${CUDA_HOST_COMPILER}")
@@ -189,13 +189,13 @@ cuda_execute_process(
 set(depends_CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
 set(CUDA_VERSION 11.4)
 if(CUDA_VERSION VERSION_LESS "3.0")
-  # Note that this will remove all occurrences of -G.
+  # Note that this will remove all occurances of -G.
   list(REMOVE_ITEM depends_CUDA_NVCC_FLAGS "-G")
 endif()
 
 # nvcc doesn't define __CUDACC__ for some reason when generating dependency files.  This
 # can cause incorrect dependencies when #including files based on this macro which is
-# defined in the generating passes of nvcc invocation.  We will go ahead and manually
+# defined in the generating passes of nvcc invokation.  We will go ahead and manually
 # define this for now until a future version fixes this bug.
 set(CUDACC_DEFINE -D__CUDACC__)
 

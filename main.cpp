@@ -150,6 +150,8 @@ static int getParametersFromCommandLine ( int argc,
     const char* depth_max_opt = "--depth_max=";
     //    const char* scale_opt         = "--scale=";
     const char* outputPath_opt = "-output_folder";
+
+
     const char* calib_opt = "-calib_file";
     const char* gt_opt = "-gt";
     const char* gt_nocc_opt = "-gt_nocc";
@@ -600,7 +602,7 @@ static int runFusibile (int argc,
     }
     cout <<"image folder is " << inputFiles.images_folder << endl;
     cout <<"p folder is " << inputFiles.p_folder << endl;
-    cout <<"pmvs folder is " << inputFiles.pmvs_folder << endl;
+    //cout <<"pmvs folder is " << inputFiles.pmvs_folder << endl;
 
     GTcheckParameters gtParameters;
 
@@ -715,9 +717,9 @@ static int runFusibile (int argc,
     printf("Camera size is %lu\n", camParams.cameras.size());
 
     for ( int i = 0; i < algParameters.num_img_processed; i++ ) {
-	printf("%f\n", camParams.cameras[i].baseline);
-	printf("%f\n", camParams.cameras[i].depthMax);
-	printf("%f\n", camParams.cameras[i].depthMin);	
+	//printf("%f\n", camParams.cameras[i].baseline);
+	//printf("%f\n", camParams.cameras[i].depthMax);
+	//printf("%f\n", camParams.cameras[i].depthMin);	
 
         algParameters.min_disparity = disparityDepthConversion ( camParams.f, camParams.cameras[i].baseline, camParams.cameras[i].depthMax );
         printf("Min disparity: %f\n", algParameters.min_disparity);
@@ -760,12 +762,12 @@ static int runFusibile (int argc,
         dat.inputImage = imread((inputFiles.images_folder + id + ext), IMREAD_COLOR);
 
         //read normal
-        cout << "Reading normal " << i << endl;
+        //cout << "Reading normal " << i << endl;
         readDmbNormal((dat.path + "/normals.dmb").c_str(),dat.normals);
 
         
         //read depth
-        cout << "Reading disp " << i << endl;
+        //cout << "Reading disp " << i << endl;
         readDmb((dat.path + "/disp.dmb").c_str(),dat.depthMap);
 
         //inputData.push_back(move(dat));

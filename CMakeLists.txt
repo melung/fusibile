@@ -21,7 +21,7 @@ endif()
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(.)
 
-set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3 --use_fast_math --ptxas-options=-v -std=c++11 --compiler-options -Wall -gencode arch=compute_86,code=sm_86 -gencode arch=compute_86,code=sm_86)
+set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3 --use_fast_math --ptxas-options=-v -std=c++11 --compiler-options -Wall -gencode arch=compute_75,code=sm_75 -gencode arch=compute_75,code=sm_75)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=c++11)

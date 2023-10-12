@@ -1,7 +1,7 @@
 [
 {
-  "directory": "/root/lhs/fusibile",
-  "command": "/usr/bin/c++   -I/root/lhs/fusibile/. -I/usr/local/cuda-11.4/include -isystem /usr/include/opencv    -std=c++11 -Wall -Wextra -pedantic -Wno-unused-function -fopenmp -std=c++11 -o CMakeFiles/fusibile.dir/main.cpp.o -c /root/lhs/fusibile/main.cpp",
-  "file": "/root/lhs/fusibile/main.cpp"
+  "directory": "/hdd1/lhs/dev/code/Github_melungl/fusibile",
+  "command": "/usr/bin/c++   -isystem /usr/include/opencv -I/hdd1/lhs/dev/code/Github_melungl/fusibile/. -I/usr/local/cuda-11.4/include    -std=c++11 -Wall -Wextra -pedantic -Wno-unused-function -fopenmp -std=c++11 -o CMakeFiles/fusibile.dir/main.cpp.o -c /hdd1/lhs/dev/code/Github_melungl/fusibile/main.cpp",
+  "file": "/hdd1/lhs/dev/code/Github_melungl/fusibile/main.cpp"
 }
 ]

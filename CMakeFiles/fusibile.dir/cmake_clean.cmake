@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/fusibile.dir/fusibile_generated_fusibile.cu.o"
   "CMakeFiles/fusibile.dir/main.cpp.o"
-  "fusibile"
   "fusibile.pdb"
+  "fusibile"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -334,7 +334,7 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
 
     if ( transformP )
         transform = getTransformationReferenceToOrigin ( R[0],t[0] );
-    cout << "transform is " << transform << endl;
+    //cout << "transform is " << transform << endl;
     params.cameras[0].reference = true;
     params.idRef = 0;
     //cout << "K before scale is" << endl;
@@ -379,7 +379,7 @@ CameraParameters getCameraParameters ( CameraParameters_cu &cpc, InputFiles inpu
             */
         }
 
-        transformCamera ( R[i],t[i], transform,    params.cameras[i],params.cameras[i].K);
+        transformCamera ( R[i],t[i], transform,    params.cameras[i],params.cameras[i].K);//!!!!!!!!!!!!!!!!!!!!!
 
         params.cameras[i].P_inv = params.cameras[i].P.inv ( DECOMP_SVD );
         params.cameras[i].M_inv = params.cameras[i].P.colRange ( 0,3 ).inv ();

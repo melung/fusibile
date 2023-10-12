@@ -6,35 +6,35 @@
 
 #IncludeRegexTransform: 
 
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 
-/root/lhs/fusibile/camera.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/camera.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 vector_types.h
 -
 
-/root/lhs/fusibile/cameraGeometryUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraGeometryUtils.h
 mathUtils.h
-/root/lhs/fusibile/mathUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/mathUtils.h
 limits
 -
 signal.h
 -
 
-/root/lhs/fusibile/cameraparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraparameters.h
 camera.h
-/root/lhs/fusibile/camera.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/camera.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 config.h
-/root/lhs/fusibile/config.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/config.h
 
-/root/lhs/fusibile/config.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/config.h
 
-/root/lhs/fusibile/displayUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/displayUtils.h
 sstream
 -
 fstream
@@ -42,35 +42,35 @@ fstream
 opencv2/contrib/contrib.hpp
 -
 point_cloud.h
-/root/lhs/fusibile/point_cloud.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud.h
 point_cloud_list.h
-/root/lhs/fusibile/point_cloud_list.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud_list.h
 
-/root/lhs/fusibile/fileIoUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/fileIoUtils.h
 iostream
 -
 fstream
 -
 
-/root/lhs/fusibile/fusibile.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/fusibile.h
 globalstate.h
-/root/lhs/fusibile/globalstate.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/globalstate.h
 point_cloud_list.h
-/root/lhs/fusibile/point_cloud_list.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud_list.h
 
-/root/lhs/fusibile/globalstate.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/globalstate.h
 algorithmparameters.h
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 cameraparameters.h
-/root/lhs/fusibile/cameraparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraparameters.h
 linestate.h
-/root/lhs/fusibile/linestate.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/linestate.h
 imageinfo.h
-/root/lhs/fusibile/imageinfo.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/imageinfo.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 point_cloud.h
-/root/lhs/fusibile/point_cloud.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud.h
 cuda_runtime.h
 -
 cuda.h
@@ -92,7 +92,7 @@ cuda_gl_interop.h
 curand_kernel.h
 -
 
-/root/lhs/fusibile/helper_cuda.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/helper_cuda.h
 stdlib.h
 -
 stdio.h
@@ -100,9 +100,9 @@ stdio.h
 string.h
 -
 helper_string.h
-/root/lhs/fusibile/helper_string.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/helper_string.h
 
-/root/lhs/fusibile/helper_string.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/helper_string.h
 stdio.h
 -
 stdlib.h
@@ -116,23 +116,23 @@ string.h
 strings.h
 -
 
-/root/lhs/fusibile/imageinfo.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/imageinfo.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 
-/root/lhs/fusibile/linestate.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/linestate.h
 string.h
 -
 algorithmparameters.h
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 cameraparameters.h
-/root/lhs/fusibile/cameraparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraparameters.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 vector_types.h
 -
 
-/root/lhs/fusibile/main.cpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/main.cpp
 windows.h
 -
 ctime
@@ -166,7 +166,7 @@ io.h
 unistd.h
 -
 helper_cuda.h
-/root/lhs/fusibile/helper_cuda.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/helper_cuda.h
 map
 -
 sys/stat.h
@@ -174,67 +174,67 @@ sys/stat.h
 sys/types.h
 -
 algorithmparameters.h
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 globalstate.h
-/root/lhs/fusibile/globalstate.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/globalstate.h
 fusibile.h
-/root/lhs/fusibile/fusibile.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/fusibile.h
 main.h
-/root/lhs/fusibile/main.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/main.h
 fileIoUtils.h
-/root/lhs/fusibile/fileIoUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/fileIoUtils.h
 cameraGeometryUtils.h
-/root/lhs/fusibile/cameraGeometryUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraGeometryUtils.h
 mathUtils.h
-/root/lhs/fusibile/mathUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/mathUtils.h
 displayUtils.h
-/root/lhs/fusibile/displayUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/displayUtils.h
 point_cloud_list.h
-/root/lhs/fusibile/point_cloud_list.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud_list.h
 
-/root/lhs/fusibile/main.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/main.h
 opencv2/calib3d/calib3d.hpp
-/root/lhs/fusibile/opencv2/calib3d/calib3d.hpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/opencv2/calib3d/calib3d.hpp
 opencv2/imgproc/imgproc.hpp
-/root/lhs/fusibile/opencv2/imgproc/imgproc.hpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/opencv2/imgproc/imgproc.hpp
 opencv2/core/core.hpp
-/root/lhs/fusibile/opencv2/core/core.hpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/opencv2/core/core.hpp
 opencv2/highgui/highgui.hpp
-/root/lhs/fusibile/opencv2/highgui/highgui.hpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/opencv2/highgui/highgui.hpp
 opencv2/core/utility.hpp
-/root/lhs/fusibile/opencv2/core/utility.hpp
+/hdd1/lhs/dev/code/Github_melungl/fusibile/opencv2/core/utility.hpp
 omp.h
 -
 stdint.h
 -
 
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 
-/root/lhs/fusibile/mathUtils.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/mathUtils.h
 
-/root/lhs/fusibile/point_cloud.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud.h
 string.h
 -
 algorithmparameters.h
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 cameraparameters.h
-/root/lhs/fusibile/cameraparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraparameters.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 vector_types.h
 -
 
-/root/lhs/fusibile/point_cloud_list.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/point_cloud_list.h
 string.h
 -
 stdlib.h
 -
 algorithmparameters.h
-/root/lhs/fusibile/algorithmparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/algorithmparameters.h
 cameraparameters.h
-/root/lhs/fusibile/cameraparameters.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/cameraparameters.h
 managed.h
-/root/lhs/fusibile/managed.h
+/hdd1/lhs/dev/code/Github_melungl/fusibile/managed.h
 vector_types.h
 -
 
